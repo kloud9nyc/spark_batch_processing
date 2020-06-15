@@ -18,11 +18,11 @@ class SalesTransactionReader extends ReaderBuilder {
 
     val startDate: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC)
 
-    val halfDay: Duration = Duration.ofHours(1)
+    val halfDay: Duration = Duration.ofHours(12)
 
     val salesTransactionReader = new ReaderBuilder()
       .withFormat("csv")
-      .withSchema(SalesTransactionSchema)
+    .withSchema(SalesTransactionSchema)
       .withHourlyPathBuilder(salesTransactionBasePath,startDate,halfDay)
       .buildReader()
 

@@ -2,7 +2,7 @@ package com.kloud9.spark.demo.utilities
 
 import java.time.{Duration, ZoneOffset, ZonedDateTime}
 
-import com.kloud9.spark.demo.InvoiceProcessor.spark
+import com.kloud9.spark.demo.jobs.InvoiceProcessor.spark
 import com.kloud9.spark.demo.context.sparkSessionSingleton
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.types.StructType
@@ -31,12 +31,18 @@ class ReaderBuilder{
     this
   }
   def buildReader(): this.type = {
-
   this
 }
  def read(): DataFrame = {
-    val df = spark.read.format(this.sFormat).option("header","true").option("inferSchema","true").load(salesTransactionBasePath + "sales.csv")
-    df
+
+   if(this.sFormat=="csv") {
+     val df = spark.read.format(this.sFormat).option("header", "true").option("inferSchema", "true").load(salesTransactionBasePath + "sales.csv")
+     df
+   }
+   if(this.sFormat=="parquet") {
+     val df = spark.read.format(this.sFormat).option("header", "true").option("inferSchema", "true").load(salesTransactionBasePath + "sales.csv")
+     df
+   }
   }
 
 
