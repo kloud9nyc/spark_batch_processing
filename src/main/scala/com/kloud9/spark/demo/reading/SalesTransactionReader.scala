@@ -12,15 +12,13 @@ class SalesTransactionReader extends ReaderBuilder {
 
 def readData(): DataFrame = {
     val SalesTransactionSchema: StructType = null
-    val salesTransactionBasePath = Path("/Users/nithya/work/gitrepos/spark_batch_processing/src/main/scala/com/kloud9/spark/demo/data/raw/")
+    val salesTransactionBasePath = Path("src/main/scala/com/kloud9/spark/demo/data/raw/")
     val startDate: ZonedDateTime = ZonedDateTime.now(ZoneOffset.UTC)
-    val halfDay: Duration = Duration.ofHours(12)
-    val salesTransactionReader = new ReaderBuilder()
+    val salesDF : DataFrame = new ReaderBuilder()
     .withFormat("csv")
     .withSchema(SalesTransactionSchema)
-    .withHourlyPathBuilder(salesTransactionBasePath,startDate,halfDay)
-    .buildReader()
-    val salesDF: DataFrame = salesTransactionReader.read()
+    .withHourlyPathBuilder(salesTransactionBasePath,startDate)
+    .read()
     return salesDF
   }
 
