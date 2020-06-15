@@ -12,7 +12,6 @@ class InvoiceProcessorContext {
   Logger.getLogger("org").setLevel(Level.ERROR)
 
   /** Read the context properties files based on the Environment */
-
   val connectionParam = new Properties
   connectionParam.load(getClass().getResourceAsStream("../config/invoiceProcessor.context.properties"))
   PropertyConfigurator.configure(connectionParam)
@@ -20,6 +19,7 @@ class InvoiceProcessorContext {
   /** Get the required details from properties file to avoid the hardcoding value inside code */
 
   val jobName = connectionParam.getProperty("jobName")
+  val driveCore = connectionParam.getProperty("driverCore")
   val defaultParallelism = connectionParam.getProperty("defaultParallelism")
 
   @transient private var sparkSession: SparkSession = null
@@ -35,15 +35,14 @@ class InvoiceProcessorContext {
       .set("spark.sql.parquet.mergeSchema", "false")
       .set("spark.hadoop.mapreduce.fileoutputcommitter.algorithm.version", "2")
       .set("spark.speculation", "false")
+      .set("spark.driver.cores",driveCore)
 
     /** Checkpointing can be enabled wherever applicable */
 
     /** Individual Spark Session Context should be created to avoid the checkpoint issues  */
-
-    if (sparkSession == null)
+    if (sparkSession == null) {
       sparkSession = SparkSession.builder().config(conf).getOrCreate()
-
-    println("[=============== Spark Session Created ===============]")
+    }
     sparkSession  }
 
 }

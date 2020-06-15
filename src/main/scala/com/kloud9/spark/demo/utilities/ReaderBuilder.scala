@@ -1,9 +1,10 @@
 package com.kloud9.spark.demo.utilities
 
+import java.time.format.DateTimeFormatter
 import java.time.{Duration, ZoneOffset, ZonedDateTime}
 
+import com.kloud9.spark.demo.context.InvoiceProcessorContext
 import com.kloud9.spark.demo.jobs.InvoiceProcessor.spark
-import com.kloud9.spark.demo.context.sparkSessionSingleton
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.types.StructType
 
@@ -12,10 +13,11 @@ import scala.reflect.io.Path
 
 class ReaderBuilder{
   val salesTransactionBasePath = "/Users/nithya/work/gitrepos/spark_batch_processing/src/main/scala/com/kloud9/spark/demo/data/raw/"
-  val singletonSparkSession = new sparkSessionSingleton()
+  val singletonSparkSession = new InvoiceProcessorContext()
   val spark = singletonSparkSession.getSparkSession()
   protected var readSchema : StructType = null
   protected var readFormat : String = ""
+  protected var filePath : String = ""
 
   def withFormat(sFormatePass: String): this.type = {
     this.readFormat = sFormatePass
@@ -26,18 +28,33 @@ class ReaderBuilder{
     this.readSchema = schema
     this
   }
-  def withHourlyPathBuilder(wdasd: Path, firstName: ZonedDateTime, Sdasdas: Duration): this.type = {
-    //fname = firstName
+  def withHourlyPathBuilder(basePath: Path, startDate: ZonedDateTime, startDuration: Duration): this.type = {
+    try {
+      val year = startDate.format(DateTimeFormatter.ofPattern("YYYY"))
+      val date = startDate.format(DateTimeFormatter.ofPattern("dd"))
+      val month = startDate.format(DateTimeFormatter.ofPattern("MM"))
+      val hour = startDate.getHour()-1
+      val filePATH =basePath+"/"+year + "/"+month +"/"+date +"/" + hour
+      this.filePath = filePATH
+    } catch {
+      case e => println(e)
+//      case e: IOException => println("Had an IOException trying to read that file")
+    }
     this
   }
   def buildReader(): this.type = {
-    this
+  this
   }
   def read(): DataFrame = {
-    val df = this.readFormat match {
-    case "csv"  => spark.read.format(this.readFormat).option("header", "true").option("inferSchema", "true").load(salesTransactionBasePath + "sales.csv")
-    case "parquet"  => spark.read.format(this.readFormat).option("header", "true").option("inferSchema", "true").load(salesTransactionBasePath + "sales.csv")
-    //case _  => "Invalid Dataframe"  // the default, catch-all
+    var df:DataFrame = null
+    try {
+      if(this.readFormat=="csv")
+        {
+         df = spark.read.format(this.readFormat).option("header", "true").option("inferSchema", "true").load(salesTransactionBasePath + "sales.csv")
+        }
+    }
+    catch {
+      case e => println(e)
     }
     df
   }

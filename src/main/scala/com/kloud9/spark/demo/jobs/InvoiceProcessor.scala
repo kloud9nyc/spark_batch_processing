@@ -1,7 +1,8 @@
 package com.kloud9.spark.demo.jobs
 
-import com.kloud9.spark.demo.context.{InvoiceProcessorContext, sparkSessionSingleton}
+import com.kloud9.spark.demo.context.InvoiceProcessorContext
 import com.kloud9.spark.demo.utilities.ReaderBuilder
+import com.kloud9.spark.demo.reading.SalesTransactionReader
 
 object InvoiceProcessor extends App {
 
@@ -11,7 +12,7 @@ object InvoiceProcessor extends App {
     println("Spark App Name  : " + singletonSparkSession.jobName)
     println("Number of Parallelism for Spark job : " + singletonSparkSession.defaultParallelism)
 
-    val salesDF = new ReaderBuilder().read()
-    salesDF.show(100)
-    //  val df: DataFrame = SalesTransactionReader.read(startDate, halfDay)
+      val df = new SalesTransactionReader().readData()
+      df.show(100)
+
   }
