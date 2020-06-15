@@ -1,12 +1,12 @@
 package com.kloud9.spark.demo.context
+
 import java.util.Properties
 
-import org.apache.log4j.{Level, LogManager, Logger, PropertyConfigurator}
+import org.apache.log4j.{Level, Logger, PropertyConfigurator}
 import org.apache.spark.SparkConf
 import org.apache.spark.sql.SparkSession
-import org.slf4j.LoggerFactory
 
-class sparkSessionSingleton {
+class InvoiceProcessorContext {
 
   /** Set the Log Level */
   Logger.getLogger("org").setLevel(Level.ERROR)
@@ -14,10 +14,10 @@ class sparkSessionSingleton {
   /** Read the context properties files based on the Environment */
 
   val connectionParam = new Properties
-  connectionParam.load(getClass().getResourceAsStream("../config/dev.context.properties"))
+  connectionParam.load(getClass().getResourceAsStream("../config/invoiceProcessor.context.properties"))
   PropertyConfigurator.configure(connectionParam)
 
-   /** Get the required details from properties file to avoid the hardcoding value inside code */
+  /** Get the required details from properties file to avoid the hardcoding value inside code */
 
   val jobName = connectionParam.getProperty("jobName")
   val defaultParallelism = connectionParam.getProperty("defaultParallelism")
