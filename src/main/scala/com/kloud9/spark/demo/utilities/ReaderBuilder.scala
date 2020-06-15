@@ -12,38 +12,33 @@ import scala.reflect.io.Path
 
 class ReaderBuilder{
   val salesTransactionBasePath = "/Users/nithya/work/gitrepos/spark_batch_processing/src/main/scala/com/kloud9/spark/demo/data/raw/"
-
   val singletonSparkSession = new sparkSessionSingleton()
   val spark = singletonSparkSession.getSparkSession()
-
-  private var schema : StructType
-  private var sFormat : String
+  protected var readSchema : StructType = null
+  protected var readFormat : String = ""
 
   def withFormat(sFormatePass: String): this.type = {
-    this.sFormat = sFormatePass
+    this.readFormat = sFormatePass
+    this
   }
 
   def withSchema(schema: StructType): this.type = {
-   this.schema = schema
-   }
+    this.readSchema = schema
+    this
+  }
   def withHourlyPathBuilder(wdasd: Path, firstName: ZonedDateTime, Sdasdas: Duration): this.type = {
-   fname = firstName
+    //fname = firstName
     this
   }
   def buildReader(): this.type = {
-  this
-}
- def read(): DataFrame = {
-
-   if(this.sFormat=="csv") {
-     val df = spark.read.format(this.sFormat).option("header", "true").option("inferSchema", "true").load(salesTransactionBasePath + "sales.csv")
-     df
-   }
-   if(this.sFormat=="parquet") {
-     val df = spark.read.format(this.sFormat).option("header", "true").option("inferSchema", "true").load(salesTransactionBasePath + "sales.csv")
-     df
-   }
+    this
   }
-
-
+  def read(): DataFrame = {
+    val df = this.readFormat match {
+    case "csv"  => spark.read.format(this.readFormat).option("header", "true").option("inferSchema", "true").load(salesTransactionBasePath + "sales.csv")
+    case "parquet"  => spark.read.format(this.readFormat).option("header", "true").option("inferSchema", "true").load(salesTransactionBasePath + "sales.csv")
+    //case _  => "Invalid Dataframe"  // the default, catch-all
+    }
+    df
+  }
 }

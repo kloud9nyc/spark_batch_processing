@@ -13,8 +13,5 @@ object InvoiceProcessor extends App {
 
     val salesDF = new ReaderBuilder().read()
     salesDF.show(100)
-
-//  val df: DataFrame = SalesTransactionReader.read(startDate, halfDay)
-
-
+    //  val df: DataFrame = SalesTransactionReader.read(startDate, halfDay)
   }
