@@ -21,6 +21,7 @@ class InvoiceProcessorContext {
   val jobName = connectionParam.getProperty("jobName")
   val driveCore = connectionParam.getProperty("driverCore")
   val defaultParallelism = connectionParam.getProperty("defaultParallelism")
+  val executorCore = connectionParam.getProperty("executorCores")
 
   @transient private var sparkSession: SparkSession = null
   /** Creating SparkSession */
@@ -36,6 +37,7 @@ class InvoiceProcessorContext {
       .set("spark.hadoop.mapreduce.fileoutputcommitter.algorithm.version", "2")
       .set("spark.speculation", "false")
       .set("spark.driver.cores",driveCore)
+      .set("spark.executor.cores",executorCore)
 
     /** Checkpointing can be enabled wherever applicable */
 

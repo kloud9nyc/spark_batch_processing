@@ -4,7 +4,7 @@ import java.time.format.DateTimeFormatter
 import java.time.{Duration, ZoneOffset, ZonedDateTime}
 
 import com.kloud9.spark.demo.context.InvoiceProcessorContext
-import com.kloud9.spark.demo.jobs.InvoiceProcessor.spark
+import com.kloud9.spark.demo.jobs.InvoiceProcessor
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.types.StructType
 
@@ -53,6 +53,8 @@ class ReaderBuilder{
     }
     catch {
       case e => println(e)
+        df = null
+
     }
     df
   }
