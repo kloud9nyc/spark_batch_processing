@@ -11,11 +11,13 @@ libraryDependencies ++= Seq(
   "org.apache.hadoop" % "hadoop-client" % "2.7.3",
   "org.apache.hadoop" % "hadoop-common" % "2.7.3",
   "org.apache.hadoop" % "hadoop-aws" % "2.7.3"
+
 )
 
 artifactName := { (sv: ScalaVersion, module: ModuleID, artifact: Artifact) =>
   artifact.name + "_" + sv.binary + "-" + "2.4.4" + "_" + module.revision + "." + artifact.extension
 }
+
 
 
 assemblyMergeStrategy in assembly := {

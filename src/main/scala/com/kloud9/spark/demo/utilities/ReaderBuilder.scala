@@ -36,24 +36,26 @@ class ReaderBuilder{
       val pathDetails = basePath + "/" + year + "/" + month + "/" + date + "/" + hour
       this.filePath = pathDetails
     } catch {
-      case e => println(e)
+      case e:Throwable => println(e)
     }
     this
   }
   def buildReader(): this.type = {
     this
   }
+
   def read(): DataFrame = {
-    var df:DataFrame = null
+    var df: DataFrame = null
     try {
+
       df = this.readFormat match {
-        case "csv"   =>
-          spark.read.format(this.readFormat).option("header", "true").option("inferSchema", "true").load(this.filePath)
+        case "csv" =>
+          spark.read.schema(this.readSchema).format(this.readFormat).option("header", "true").option("inferSchema", "true").load(this.filePath)
       }
     }
     catch {
-      case e => println(e)
-        df = null
+      case e:Throwable => println(e)
+        df=null
 
     }
     df
